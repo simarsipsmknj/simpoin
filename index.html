@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SIPOIN SMKNJ</title>
+<meta name="description" content="Poin pelanggaran dan prestasi SMKS Nurul Jadid">
+<meta name="theme-color" content="#0a3a2b">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SIPOIN">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<style>
+  html,body{margin:0;padding:0;height:100%;background:#0a3a2b;overflow:hidden}
+  #app{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;background:#f4f6f5;
+       padding-top:env(safe-area-inset-top);box-sizing:border-box}
+  #splash{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;
+          background:#0a3a2b;color:#e8f2ed;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;z-index:2;transition:opacity .35s}
+  #splash.hide{opacity:0;pointer-events:none}
+  #splash img{width:96px;height:96px;border-radius:22px}
+  #splash b{font-size:20px;letter-spacing:.02em}
+  #splash small{opacity:.7;font-size:13px}
+  .bar{width:140px;height:4px;border-radius:4px;background:rgba(255,255,255,.15);overflow:hidden}
+  .bar i{display:block;width:40%;height:100%;background:#e8f2ed;border-radius:4px;animation:jalan 1.1s ease-in-out infinite}
+  @keyframes jalan{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+  #offline{display:none;position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom));z-index:3;
+           background:#9f1d2b;color:#fff;border-radius:10px;padding:12px 14px;font:600 14px system-ui,sans-serif;
+           box-shadow:0 8px 24px rgba(0,0,0,.25);align-items:center;gap:10px}
+  #offline button{margin-left:auto;border:0;border-radius:8px;padding:8px 12px;font:700 13px system-ui,sans-serif;background:#fff;color:#9f1d2b}
+</style>
+</head>
+<body>
+<div id="splash" role="status" aria-live="polite">
+  <img src="icons/icon-192.png" alt="">
+  <b>SIPOIN SMKNJ</b>
+  <div class="bar"><i></i></div>
+  <small id="splashMsg">Memuat aplikasi&hellip;</small>
+</div>
+<div id="offline"><span>Tidak ada koneksi internet.</span><button type="button" onclick="muatUlang()">Coba lagi</button></div>
+<iframe id="app" title="SIPOIN SMKNJ"
+  src="https://script.google.com/macros/s/AKfycbxhKM-TpcTJ7RfbB3FFGWV4MqF7BJrrWacMxVjF6h8sphs8JMd5Y7_cn_cClceIKmPm/exec"
+  allow="camera; clipboard-read; clipboard-write; fullscreen" allowfullscreen></iframe>
+<script>
+  var fr = document.getElementById('app'), sp = document.getElementById('splash'), off = document.getElementById('offline');
+  function tutupSplash(){ sp.classList.add('hide'); }
+  fr.addEventListener('load', function(){ setTimeout(tutupSplash, 300); });
+  setTimeout(function(){ document.getElementById('splashMsg').textContent = 'Koneksi lambat, mohon tunggu…'; }, 8000);
+  setTimeout(tutupSplash, 25000);
+  function cekKoneksi(){ off.style.display = navigator.onLine ? 'none' : 'flex'; }
+  function muatUlang(){ if (navigator.onLine){ off.style.display = 'none'; fr.src = fr.src; } }
+  window.addEventListener('online', function(){ cekKoneksi(); });
+  window.addEventListener('offline', cekKoneksi);
+  cekKoneksi();
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(function(){});
+</script>
+</body>
+</html>
